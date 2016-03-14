@@ -1,0 +1,21 @@
+access_token : <Twitter access token goes here>    
+access_token_secret : <Twitter secret access token goes here> 
+consumer_key : <Twitter consumer key goes here> 
+consumer_secret : <Twitter consumer secret goes here>
+
+google_api_key : <Google Api key goes here (optional>
+
+subreddit_name : <subreddit name goes here>
+
+include_karma : 1
+include_nsfw_check : 1
+include_title : 1
+include_author : 0
+include_num_comments :0
+include_link : 1
+
+use_permalink_url: 0
+use_google_shortener: 0
+use_quotes_around_title: 1
+
+tweet_delay : 30           # In minutes
