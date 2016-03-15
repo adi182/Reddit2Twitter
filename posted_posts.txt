@@ -1,1 +1,1 @@
-** used reddit post ids will be placed here**
+** IDs of reddit posts sent to twitter will be placed here**

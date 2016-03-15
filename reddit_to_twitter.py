@@ -3,72 +3,74 @@ import json
 import requests
 import tweepy
 import time
+import sys
 
 def setupConnection(subreddit):
 	print "[r2t] setting up connection with Reddit"
-	r = praw.Reddit('zakagan and yasoob_python reddit to twitter poster'
-				'monitoring %s' %(subreddit)) 
+	try:
+		r = praw.Reddit('zakagan and yasoob_python\'s Reddit2Twitter app, monitoring %s' %(subreddit)) 
+	except:
+		print  "[r2t] Error accessing subreddit via Praw"
+		sys.exit()
 	subreddit = r.get_subreddit(subreddit)
-	return subreddit
+	try:
+		subreddit.id  #if subreddit doesn't exist, it will have no id on reddit & throw an error
+		print "[r2t] Connected to /r/%s" %(subreddit.display_name)
+		return subreddit
+	except:
+		print "[r2t] subreddit could not be found, check name in config file"
+		sys.exit()
 
-def collectPosts(subreddit_info):
-	print "[r2t] Collecting top posts on r/" + config_dict['subreddit_name']
-	for index, submission in enumerate(subreddit_info.get_hot(limit=25)):
+def collectPosts(subreddit):
+	print "[r2t] Collecting current top posts"
+	for index, submission in enumerate(subreddit.get_hot(limit=25)):
 		found = duplicateCheck(submission.id)
 		if found == 0:
-			print "[r2t] Post #%d selected:" %(index+1)
+			print "[r2t] Post #%d selected" %(index+1)
 			return submission
 		else:
 			print "[r2t] Post #%d: ID already collected" %(index+1)
 
 def tweetComposer(post):
 	char_remaining=140
-	content_dict={'score':"", 'nsfw_warning':"", 'title':"", 'author':"", 'num_comments':"",'link':""}
+	content_list=[]
 	num_content=config_dict['include_karma'] + config_dict['include_nsfw_check'] + config_dict['include_title'] \
 		+ config_dict['include_author'] + config_dict['include_num_comments'] + config_dict['include_link']
 	index=0
-
 	if config_dict['include_karma']==1:
-		score=("%d" %(post.score)+u"\u2B06" + ":").encode("utf-8")+getSeperationStr(index,num_content)
+		score=("%d" %(post.score)+u"\u2B06" + ":").encode("utf-8")
 		if char_remaining-len(score) >= 0:
-			content_dict['score']=score
-			char_remaining-=len(score)-2
+			content_list.append(score)
+			char_remaining-=len(score)-2+sepCharLen(len(content_list),num_content)
 		del score	
-		index+=1
 
 	if config_dict['include_nsfw_check']==1 and post.over_18==True:
-		nsfw_warning="[NSFW]"+getSeperationStr(index,num_content)
+		nsfw_warning="[NSFW]"
 		if char_remaining-len(nsfw_warning) >= 0:
-			content_dict['nsfw_warning']=nsfw_warning
-			char_remaining-=len(nsfw_warning)
+			content_list.append(nsfw_warning)
+			char_remaining-=len(nsfw_warning)+sepCharLen(len(content_list),num_content)
 		del nsfw_warning	
-		index+=1
-	elif config_dict['include_nsfw_check']==1:
-		index+=1
 
 	if config_dict['include_title']==1:
 		title=(post.title).encode("utf-8")
-		content_dict['title']=title
-		title_index=index
+		title_index=len(content_list)		
+		content_list.append(title)
 		# the post title's length is updated last	
 		del title
-		index+=1
 
 	if config_dict['include_author']==1:
-		author="- u/" + post.author.name.encode("utf-8") + getSeperationStr(index,num_content)
+		author="- u/" + post.author.name.encode("utf-8")
 		if char_remaining-len(author) >= 0:			
-			content_dict['author']=author
-			char_remaining-=len(author)
+			content_list.append(author)
+			char_remaining-=len(author)+sepCharLen(len(content_list),num_content)
 		del author			
-		index+=1
 
 	if config_dict['include_num_comments']==1:
-		num_comments=str(post.num_comments)+" comments"+ getSeperationStr(index,num_content)
+		num_comments=str(post.num_comments)+" comments"
 		if char_remaining-len(num_comments) >= 0:					
-			content_dict['num_comments']=num_comments
-			char_remaining-=len(num_comments)		
+			content_list.append(num_comments)
+			char_remaining-=len(num_comments)+sepCharLen(len(content_list),num_content)	
 		del num_comments					
-		index+=1
 
 	if config_dict['include_link']==1:
 		if config_dict['use_permalink_url']==1:
@@ -77,19 +79,18 @@ def tweetComposer(post):
 			post_link=post.url
 
 		if config_dict['use_google_shortener']==1:
-			post_link=googleShortener(post_link)+ getSeperationStr(index,num_content)
+			post_link=googleShortener(post_link)
 			shortened_link_len=len(post_link)
 		else:		#using Twitter's shortening method
-			shortened_link_len=24+len(getSeperationStr(index,num_content))
+			shortened_link_len=24
 		
 		if char_remaining-shortened_link_len >=0:
-			content_dict['link']=post_link.encode("utf-8")
-			char_remaining-=shortened_link_len		
-		index+=1
+			content_list.append(post_link.encode("utf-8"))
+			char_remaining-=shortened_link_len+sepCharLen(len(content_list),num_content)	
 
 	if config_dict['include_title']==1:	 #The post title is revisted to see if it must be truncated
-		title=content_dict['title']
-		char_remaining-= len(getSeperationStr(title_index,num_content))
+		title=content_list[title_index]
+		char_remaining-= sepCharLen(title_index,num_content)
 		if config_dict['use_quotes_around_title']==1:
 			char_remaining-=2	
 		if char_remaining-len(title) < 0 and char_remaining >= 3:
@@ -98,23 +99,22 @@ def tweetComposer(post):
 		if char_remaining-len(title) >= 0 and char_remaining >=3:
 			if config_dict['use_quotes_around_title']==1:
 				title="\""+title+"\""
-			title+= getSeperationStr(title_index,num_content)
 		else:
 			title=""			
-		content_dict['title']=title
+		content_list[title_index]=title
 		del title
 	
-	tweet_content= content_dict['score'] + content_dict['nsfw_warning'] + content_dict['title'] \
-		+ content_dict['author']+ content_dict['num_comments'] + content_dict['link']
-
+	tweet_content= " ".join(content_list)
 	print tweet_content
 	return tweet_content
 
-def getSeperationStr(index, max_len):
+#The following is a helper function is used to update the remaining characters
+#variable so that it accounts for the spaces inserted between elements of content
+def sepCharLen(index, max_len):
 		if index < max_len-1:
-			return" "
+			return 1
 		else:
-			return""	
+			return 0	
 
 def googleShortener(url):
 	try:
@@ -140,7 +140,8 @@ def tweetSender(tweet):
 		try:
 			print "[Twitter] "+ e.args[0][0]['message']
 		except:
-			print "[r2t] Unfamiler error"	
+			print "[r2t] Error outside of communication with Twitter"	
+		sys.exit()	
 
 def addPostID(post):
 	with open('posted_posts.txt', 'a') as file:
@@ -165,7 +166,23 @@ def main():
 		time.sleep(config_dict['tweet_delay']*60)		
 
 if __name__ == '__main__':
-	config_dict={}
+	config_dict = {'access_token': "",   
+		'access_token_secret':"",
+		'consumer_key': "",
+		'consumer_secret' : "",
+		'google_api_key' : "",
+		'subreddit_name' : "",
+		'include_karma' : 0,
+		'include_nsfw_check' : 0,
+		'include_title' : 0,
+		'include_author' : 0,
+		'include_num_comments' :0,
+		'include_link' : 0,
+		'use_permalink_url' : 0,
+		'use_google_shortener': 0,
+		'use_quotes_around_title': 0,
+		'tweet_delay' : 0}
+	
 	with open("r2t_config.txt") as f:
 		for line in f:
 			line=line.replace(':', " ")			
@@ -179,5 +196,15 @@ if __name__ == '__main__':
 				except:
 					pass	
 				config_dict[key] = val
-	f.close()		
+	f.close()
+	for key in ['include_karma', 'include_nsfw_check', 'include_title',
+		'include_author','include_num_comments', 'include_link', 
+		'use_permalink_url', 'use_google_shortener', 
+		'use_quotes_around_title', 'tweet_delay']:
+
+		if isinstance(config_dict[key],int)==False:
+			config_dict[key]=0
+
+		if key=='tweet_delay' and config_dict[key]<5:
+			config_dict[key]=5	
 	main()
