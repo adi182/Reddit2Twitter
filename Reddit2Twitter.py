@@ -36,40 +36,41 @@ def tweetComposer(post):
 	content_list=[]
 	num_content=config_dict['include_karma'] + config_dict['include_nsfw_check'] + config_dict['include_title'] \
 		+ config_dict['include_author'] + config_dict['include_num_comments'] + config_dict['include_link']
-	index=0
+	char_remaining-=num_content-1
+
 	if config_dict['include_karma']==1:
-		score=("%d" %(post.score)+u"\u2B06" + ":").encode("utf-8")
+		score=("%d" %(post.score)+u"\u2B06" + ":").encode("utf-8").decode("utf-8")
 		if char_remaining-len(score) >= 0:
 			content_list.append(score)
-			char_remaining-=len(score)-2+sepCharLen(len(content_list),num_content)
+			char_remaining-=len(score)
 		del score	
 
 	if config_dict['include_nsfw_check']==1 and post.over_18==True:
 		nsfw_warning="[NSFW]"
 		if char_remaining-len(nsfw_warning) >= 0:
 			content_list.append(nsfw_warning)
-			char_remaining-=len(nsfw_warning)+sepCharLen(len(content_list),num_content)
+			char_remaining-=len(nsfw_warning)
 		del nsfw_warning	
 
 	if config_dict['include_title']==1:
-		title=(post.title).encode("utf-8")
+		title=post.title
 		title_index=len(content_list)		
 		content_list.append(title)
 		# the post title's length is updated last	
 		del title
 
 	if config_dict['include_author']==1:
-		author="- u/" + post.author.name.encode("utf-8")
+		author="- u/" + post.author.name.encode("utf-8").decode("utf-8")
 		if char_remaining-len(author) >= 0:			
 			content_list.append(author)
-			char_remaining-=len(author)+sepCharLen(len(content_list),num_content)
+			char_remaining-=len(author)
 		del author			
 
 	if config_dict['include_num_comments']==1:
-		num_comments=str(post.num_comments)+" comments"
+		num_comments="%d comments" %(post.num_comments)
 		if char_remaining-len(num_comments) >= 0:					
 			content_list.append(num_comments)
-			char_remaining-=len(num_comments)+sepCharLen(len(content_list),num_content)	
+			char_remaining-=len(num_comments)
 		del num_comments					
 
 	if config_dict['include_link']==1:
@@ -82,39 +83,37 @@ def tweetComposer(post):
 			post_link=googleShortener(post_link)
 			shortened_link_len=len(post_link)
 		else:		#using Twitter's shortening method
-			shortened_link_len=24
-		
+			shortened_link_len=24		#For now twitter reserves 24 characters for links and media, this may change
+
 		if char_remaining-shortened_link_len >=0:
-			content_list.append(post_link.encode("utf-8"))
-			char_remaining-=shortened_link_len+sepCharLen(len(content_list),num_content)	
+			content_list.append(post_link)
+			char_remaining-=shortened_link_len
+		del post_link, shortened_link_len	
 
 	if config_dict['include_title']==1:	 #The post title is revisted to see if it must be truncated
 		title=content_list[title_index]
-		char_remaining-= sepCharLen(title_index,num_content)
 		if config_dict['use_quotes_around_title']==1:
 			char_remaining-=2	
-		if char_remaining-len(title) < 0 and char_remaining >= 3:
-			title=title[:char_remaining-len(title)-3]+ '...'
+		if char_remaining-len(title) < 0 and char_remaining >0:
+			title=(title[:char_remaining-len(title)-1]+ u"\u2026").encode("utf-8").decode("utf-8")
 
-		if char_remaining-len(title) >= 0 and char_remaining >=3:
+		if char_remaining-len(title) >= 0 and char_remaining >0:
 			if config_dict['use_quotes_around_title']==1:
 				title="\""+title+"\""
 		else:
-			title=""			
-		content_list[title_index]=title
-		del title
-	
-	tweet_content= " ".join(content_list)
-	print tweet_content
-	return tweet_content
+			title=''			
 
-#The following is a helper function is used to update the remaining characters
-#variable so that it accounts for the spaces inserted between elements of content
-def sepCharLen(index, max_len):
-		if index < max_len-1:
-			return 1
+		content_list[title_index]=title
+		if config_dict['use_quotes_around_title']==1:
+			char_remaining-=len(title)-2		#in this surrounding quotation marks have been already factored
 		else:
-			return 0	
+			char_remaining-=len(title)
+		del title
+
+	tweet_content= " ".join(content_list)
+	print tweet_content.encode("utf-8")
+	print "Characters remaining = %d" %(char_remaining)
+	return tweet_content
 
 def googleShortener(url):
 	try:
@@ -160,19 +159,19 @@ def main():
 	while True:
 		subreddit = setupConnection(config_dict['subreddit_name'])
 		reddit_post = collectPosts(subreddit)
-		tweet_content = tweetComposer(reddit_post)		
-		tweetSender(tweet_content)		
-		addPostID(reddit_post)		
+		tweet_content = tweetComposer(reddit_post)	
+		tweetSender(tweet_content)
+		addPostID(reddit_post)					
 		time.sleep(config_dict['tweet_delay']*60)		
 
 if __name__ == '__main__':
-	config_dict = {'access_token': "",   
+	config_dict = {'access_token': "",    #defining what we expect to gt from the config file
 		'access_token_secret':"",
 		'consumer_key': "",
 		'consumer_secret' : "",
 		'google_api_key' : "",
 		'subreddit_name' : "",
-		'include_karma' : 0,
+		'include_karma' : 0,               #Note that boolean values will default to 0
 		'include_nsfw_check' : 0,
 		'include_title' : 0,
 		'include_author' : 0,
@@ -183,7 +182,7 @@ if __name__ == '__main__':
 		'use_quotes_around_title': 0,
 		'tweet_delay' : 0}
 	
-	with open("r2t_config.txt") as f:
+	with open("r2t_config.txt") as f:       #Read from config file and save to global dictionary
 		for line in f:
 			line=line.replace(':', " ")			
 			line=line.replace('#', " ")
@@ -197,11 +196,11 @@ if __name__ == '__main__':
 					pass	
 				config_dict[key] = val
 	f.close()
-	for key in ['include_karma', 'include_nsfw_check', 'include_title',
+	for key in ['include_karma', 'include_nsfw_check', 'include_title', 
 		'include_author','include_num_comments', 'include_link', 
 		'use_permalink_url', 'use_google_shortener', 
 		'use_quotes_around_title', 'tweet_delay']:
-
+		#Check if  required int values really are ints
 		if isinstance(config_dict[key],int)==False:
 			config_dict[key]=0
 

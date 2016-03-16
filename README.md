@@ -1,7 +1,7 @@
 Reddit2Twitter
 =======
 
-This twitter bot was inspired by Yasoob's [Reddit-Twitter bot](https://github.com/yasoob/Reddit-Twitter-bot). I started making this after reading this [blog post of his](http://pythontips.com/2013/09/14/making-a-reddit-twitter-bot/). Yasoob has some great materials for learning python, so check him out!
+This twitter bot was inspired by Yasoob's [Reddit-Twitter bot](https://github.com/yasoob/Reddit-Twitter-bot). I started making this after reading [this blog post of his](http://pythontips.com/2013/09/14/making-a-reddit-twitter-bot/). Yasoob has some great materials for learning python, so check him out!
 
 Unfortunatelty, due to some changes in how Twitter and Google handling url shortening, Yasoob's bot was no longer funtional. I started making this variation long before I learned about pull requests, and it's expanded further in scope somewhat.
 
@@ -9,7 +9,7 @@ The goal of Reddit2Twitter is to automate the movement of content from a subredd
 
 Required libraries
 -----------
-A few additional libraries must be installed to run this script.
+A few additional libraries must be installed to run this script. If you are not famillar with pip, you may start with [this documentation](https://pypi.python.org/pypi/pip)
 
 - PRAW
   * Reddit API wrapper for Python
@@ -21,10 +21,30 @@ A few additional libraries must be installed to run this script.
   * Python HTTP library
   * install via pip: ```pip install requests```
 
-Getting started: Access tokens, API keys, and the Config file
+The Config File
 -----------
-Before we start tweeting, we have to take care of some set up in order to properly connect our bot with Twitter. Since this bot only reads posts to reddit and doesn't write (at this time), no reddit account is required.
+You can customize how content gathered from reddit gets formatted for twitter my modifying the config file. 
 
-You can customize how content gathered from reddit gets formatted for twitter my modifying the config file.
+Please read the sample config file provided. Feel free to make adjustments for your own personal use. I will update this section with more detail on how to adjust your twitter bot's settings soon.
+
+Access tokens and API keys
+-----------
+Next we have to take care of some set up in order to properly connect our bot with Twitter. Since this bot only reads posts to reddit and doesn't write (at this time), no reddit account is required.
+
+Go to [http://dev.twitter.com/apps](http://dev.twitter.com/apps) and register your app Iin this case the app is the Reddit2Twitter bot). You will have to register on the same twitter account that you plan on using your bot with. That means if you want your bot to tweet with its own account, you will have to set that account up first.
+
+Once you have registered, you will need to access and copy the following 4 security codes:
+
+1. ```Access Token```
+2. ```Access Token Secret```
+3. ```Consumer Key```
+4. ```Consumer Secret```
+
+These securiity codes are used to authenticate your bot when it commenticates with twitter. You will have to add these to the config file before executing the Reddit2Twitter script.
+
+If you want you can also have your bot use Google's url shortner. Twitter has its own method for automatically shortening links, so generally using Google's shortener as well is not recommended. Twitter's t.co links allows for previews, embedded content, and it doesn't completly obsificate the name of the destination site. But Google's shortening method takes up 21 characters, while Twitter's requires 24 at this time. So, if you really care about those 3 characters you can opt into using Google's shortener. To do so though you will need to get a ```Google API Key```. For details please read this [section of the Google Developers guide](https://developers.google.com/url-shortener/v1/getting_started#OAuth2Authorizing).
+
+If you do not want to use Google url shortener then go to the config file and set the apropriate field to ```0```. If the ```Google API Key``` isn't recognized, the script will default to using Twitter's default t.co method anyway.
+
 
 

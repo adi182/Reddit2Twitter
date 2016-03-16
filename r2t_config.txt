@@ -5,7 +5,7 @@ consumer_secret : <Twitter consumer secret goes here>
 
 google_api_key : <Google Api key goes here (optional)>
 
-subreddit_name : <subreddit name goes here>
+subreddit_name : videos <subreddit name goes here>
 
 include_karma : 1      #This block represents content to be composed in a tweet
 include_nsfw_check : 1
