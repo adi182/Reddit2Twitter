@@ -39,7 +39,7 @@ def tweetComposer(post):
 	char_remaining-=num_content-1
 
 	if config_dict['include_karma']==1:
-		score=("%d" %(post.score)+u"\u2B06" + ":").encode("utf-8").decode("utf-8")
+		score=("%d" %(post.score)+u'\u2B06' + ":").encode("utf-8").decode("utf-8")
 		if char_remaining-len(score) >= 0:
 			content_list.append(score)
 			char_remaining-=len(score)
@@ -81,10 +81,8 @@ def tweetComposer(post):
 
 		if config_dict['use_google_shortener']==1:
 			post_link=googleShortener(post_link)
-			shortened_link_len=len(post_link)
-		else:		#using Twitter's shortening method
-			shortened_link_len=24		#For now twitter reserves 24 characters for links and media, this may change
 
+		shortened_link_len=24		#For now twitter reserves 24 characters for all links and media, this may change
 		if char_remaining-shortened_link_len >=0:
 			content_list.append(post_link)
 			char_remaining-=shortened_link_len
@@ -95,7 +93,7 @@ def tweetComposer(post):
 		if config_dict['use_quotes_around_title']==1:
 			char_remaining-=2	
 		if char_remaining-len(title) < 0 and char_remaining >0:
-			title=(title[:char_remaining-len(title)-1]+ u"\u2026").encode("utf-8").decode("utf-8")
+			title=(title[:char_remaining-len(title)-1]+ u'\u2026').encode("utf-8").decode("utf-8")
 
 		if char_remaining-len(title) >= 0 and char_remaining >0:
 			if config_dict['use_quotes_around_title']==1:
@@ -200,7 +198,7 @@ if __name__ == '__main__':
 		'include_author','include_num_comments', 'include_link', 
 		'use_permalink_url', 'use_google_shortener', 
 		'use_quotes_around_title', 'tweet_delay']:
-		#Check if  required int values really are ints
+		#Check if required int values really are ints
 		if isinstance(config_dict[key],int)==False:
 			config_dict[key]=0
 

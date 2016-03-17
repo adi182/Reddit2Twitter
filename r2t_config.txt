@@ -1,21 +1,21 @@
-access_token : <Twitter access token goes here>    
-access_token_secret : <Twitter secret access token goes here> 
-consumer_key : <Twitter consumer key goes here> 
-consumer_secret : <Twitter consumer secret goes here>
+access_token : <TWITTER ACCESS TOKEN GOES HERE>               #Do not include quotes, brackets, etc
+access_token_secret : <TWITTER SECRET ACCESS TOKEN GOES HERE> 
+consumer_key : <TWITTER CONSUMER KEY GOES HERE> 
+consumer_secret : <TWITTER CONSUMER SECRET GOES HERE>
 
-google_api_key : <Google Api key goes here (optional)>
+google_api_key : <GOOGLE API KEY GOES HERE (optional, not recommended)>
 
-subreddit_name : videos <subreddit name goes here>
+subreddit_name : <SUBREDDIT NAME GOES HERE>
 
-include_karma : 1      #This block represents content to be composed in a tweet
+include_karma : 1      			#This block represents content to be composed in a tweet
 include_nsfw_check : 1
 include_title : 1
 include_author : 0
 include_num_comments :0
 include_link : 1
 
-use_permalink_url: 0   #This block respenents optional settings
-use_google_shortener: 0
+use_permalink_url: 0   			#This block respenents optional settings
+use_google_shortener: 0  		#Using google's shortener is not recommended, keep as 0 to default to t.co
 use_quotes_around_title: 1
 
 tweet_delay : 30       #Time between tweets in minutes, minimum delay is 5 min
