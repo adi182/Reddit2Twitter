@@ -110,7 +110,7 @@ def tweetComposer(post):
 
 	tweet_content= " ".join(content_list)
 	print tweet_content.encode("utf-8")
-	print "Characters remaining = %d" %(char_remaining)
+	print "[r2t] Characters remaining = %d" %(char_remaining)
 	return tweet_content
 
 def googleShortener(url):
