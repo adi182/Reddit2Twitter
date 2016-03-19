@@ -44,12 +44,27 @@ If you do not want to use Google url shortener then go to the config file and se
 
 The Config File
 -----------
-You can customize how content gathered from reddit gets formatted for twitter my modifying the config file. 
+This file serves two purposes. First it is where you will store the various secrutity codes needed for the bot to opperate, along with th name of your selected subreddit. Second you can customize how content gathered from reddit gets formatted by modifying a list of values. 
 
-Please read the sample config file provided. Feel free to make adjustments for your own personal use. I will update this section with more detail on how to adjust your twitter bot's settings soon.
+Here is what can be customized, all but one boiling down to a boolean option:
 
-First a note about shortening links. Twitter will shorten links to all types of sites and media automatically. Twitter's t.co links allows for previews, embedded content, and they doesn't completly obsificate the name of the destination site. No matter what kind of link provided, 23 or 24 characters are allocated to it. For this reason I advise that all links be handled by twitter's default t.co shortener.
+* The post's karma score (```1``` to display it, ```0``` to ommit it)
+* The post's title (selected as above)
+* The post's author username 
+* The current number of comments 
+* The post's URL 
+* Whether or not to use the post's permalink url vs the submitted link (```1``` to choose the permalink, ```0``` to choose the submitted link)
+* Whether or not to use Google's URL shortener
+* Whether or not to use quotes around a post's title
+* How long to wait between sending out tweets (in minutes)
 
-To do this just keep the ```use_google_shortener``` to ```0```. However, if you want to use google's shortening method it is still supported. To do so, set ```use_google_shortener``` to ```01```. Regardless of the shortened links length, twitter will still set aside 23 or 24 for it. 
+Automatically Shortening Links
+-----------
+
+Many have asked for the integration of Google's URL shortener. However at this point it's a bit redundent for use on twitter.
+
+Twitter will automatically shorten links for all types of media and websites. Twitter's t.co links allow  previews, embedded content, and partial visablity of the original URL. And Twitter uses this on all links within Tweets. No matter what kind of link provided, 23 or 24 characters are allocated to it. For this reason I advise that all links be handled by twitter's default t.co shortener.
+
+To do this just keep the ```use_google_shortener``` to ```0```. However, if you want to use google's shortening method, it is still supported. To do so set ```use_google_shortener``` to ```01```. Regardless of the shortened links length, twitter will still set aside 23 or 24 characters for it. 
 
 

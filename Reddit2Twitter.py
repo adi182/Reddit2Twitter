@@ -39,11 +39,11 @@ def tweetComposer(post):
 	char_remaining-=num_content-1
 
 	if config_dict['include_karma']==1:
-		score=("%d" %(post.score)+u'\u2B06' + ":").encode("utf-8").decode("utf-8")
+		score=u"%d\u2B06:" %(post.score)
 		if char_remaining-len(score) >= 0:
 			content_list.append(score)
 			char_remaining-=len(score)
-		del score	
+		del score
 
 	if config_dict['include_nsfw_check']==1 and post.over_18==True:
 		nsfw_warning="[NSFW]"
@@ -60,7 +60,7 @@ def tweetComposer(post):
 		del title
 
 	if config_dict['include_author']==1:
-		author="- u/" + post.author.name.encode("utf-8").decode("utf-8")
+		author="- u/" + post.author.name
 		if char_remaining-len(author) >= 0:			
 			content_list.append(author)
 			char_remaining-=len(author)
@@ -93,7 +93,7 @@ def tweetComposer(post):
 		if config_dict['use_quotes_around_title']==1:
 			char_remaining-=2	
 		if char_remaining-len(title) < 0 and char_remaining >0:
-			title=(title[:char_remaining-len(title)-1]+ u'\u2026').encode("utf-8").decode("utf-8")
+			title=(title[:char_remaining-len(title)-1]+ u'\u2026')
 
 		if char_remaining-len(title) >= 0 and char_remaining >0:
 			if config_dict['use_quotes_around_title']==1:
@@ -148,8 +148,8 @@ def addPostID(post):
 def duplicateCheck(post_id):
 	found = 0
 	with open('posted_posts.txt', 'r') as file:
-		for line in file:
-			if post_id in line:
+		for line in file.read().splitlines():
+   			if post_id == line:
 				found = 1
 	return found
 
@@ -158,8 +158,9 @@ def main():
 		subreddit = setupConnection(config_dict['subreddit_name'])
 		reddit_post = collectPosts(subreddit)
 		tweet_content = tweetComposer(reddit_post)	
+		addPostID(reddit_post)		
 		tweetSender(tweet_content)
-		addPostID(reddit_post)					
+		#addPostID(reddit_post)					
 		time.sleep(config_dict['tweet_delay']*60)		
 
 if __name__ == '__main__':
