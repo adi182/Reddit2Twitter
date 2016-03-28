@@ -14,7 +14,7 @@ def setupConnection(subreddit):
 		sys.exit()
 	subreddit = r.get_subreddit(subreddit)
 	try:
-		subreddit.id  #if subreddit doesn't exist, it will have no id on reddit & throw an error
+		assert subreddit.id  #if subreddit doesn't exist, it will have no id on reddit & throw an error
 		print "[r2t] Connected to /r/%s" %(subreddit.display_name)
 		return subreddit
 	except:
@@ -149,8 +149,9 @@ def duplicateCheck(post_id):
 	found = 0
 	with open('posted_posts.txt', 'r') as file:
 		for line in file.read().splitlines():
-   			if post_id == line:
+			if post_id == line:
 				found = 1
+	file.close()			
 	return found
 
 def main():
@@ -203,6 +204,6 @@ if __name__ == '__main__':
 		if isinstance(config_dict[key],int)==False:
 			config_dict[key]=0
 
-		if key=='tweet_delay' and config_dict[key]<5:
-			config_dict[key]=5	
+		if key=='tweet_delay' and config_dict[key]<3:
+			config_dict[key]=3	
 	main()

@@ -3,13 +3,17 @@ Reddit2Twitter
 
 This twitter bot was inspired by Yasoob's [Reddit-Twitter bot](https://github.com/yasoob/Reddit-Twitter-bot). I started making this after reading [this blog post of his](http://pythontips.com/2013/09/14/making-a-reddit-twitter-bot/). Yasoob has some great materials for learning python, so check him out!
 
-Unfortunatelty, due to some changes in how Twitter and Google handling url shortening, Yasoob's bot was no longer funtional. I started making this variation long before I learned about pull requests, and it's expanded further in scope somewhat.
+Unfortunatelty, due to some changes in how Twitter and Google handle url shortening, Yasoob's bot was no longer funtional. Yasoob and I have updated his bot for 2016, but this project allows for even greater flexiblity by adding a config file.
 
-The goal of Reddit2Twitter is to automate the movement of content from a subreddit to a twitter account. This is ideal if you manage a community on twitter, and want to make your subreddit's content immediately availble to an audiance on Twitter. Reddit2Twitter also provides some additional customablity to help facilitate this.
+The goal of Reddit2Twitter is to automate the movement of content from a subreddit to a twitter account. This is ideal if you manage a community on twitter, and want to make your subreddit's content immediately available to that audiance. The bot is designed to be flexible but robust, and comes with several options for displaying content.
+
+I currently use Reddit2Twitter to run my [Subreddit Simulator twitter bot](https://twitter.com/subreddit_sim), which composes tweets from popular posts on [/r/SubredditSimulator](https://www.reddit.com/r/SubredditSimulator/). I guess I just like bots taking direction from other bots. Here is an example tweet:
+
+
 
 Required libraries
 -----------
-A few additional libraries must be installed to run this script. If you are not famillar with pip, you may start with [this documentation](https://pypi.python.org/pypi/pip)
+A few additional libraries must be installed to run this script. If you are not famillar with pip, you should start with [this documentation](https://pypi.python.org/pypi/pip)
 
 - PRAW
   * Reddit API wrapper for Python
@@ -25,7 +29,7 @@ Access tokens and API keys
 -----------
 Next we have to take care of some set up in order to properly connect our bot with Twitter. Since this bot only reads posts to reddit and doesn't write (at this time), no reddit account is required.
 
-Go to [http://dev.twitter.com/apps](http://dev.twitter.com/apps) and register your app Iin this case the app is the Reddit2Twitter bot). You will have to register on the same twitter account that you plan on using your bot with. That means if you want your bot to tweet with its own account, you will have to set that account up first.
+Go to [http://dev.twitter.com/apps](http://dev.twitter.com/apps) and register your app (in this case the app is the Reddit2Twitter bot). You will have to register with the same twitter account that you plan on using your bot with. That means that if you want your bot to tweet with its own account, you will have to set that account up first.
 
 Once you have registered, you will need to access and copy the following 4 security codes:
 
