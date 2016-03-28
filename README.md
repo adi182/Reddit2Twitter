@@ -7,9 +7,9 @@ Unfortunatelty, due to some changes in how Twitter and Google handle url shorten
 
 The goal of Reddit2Twitter is to automate the movement of content from a subreddit to a twitter account. This is ideal if you manage a community on twitter, and want to make your subreddit's content immediately available to that audiance. The bot is designed to be flexible but robust, and comes with several options for displaying content.
 
-I currently use Reddit2Twitter to run my [Subreddit Simulator twitter bot](https://twitter.com/subreddit_sim), which composes tweets from popular posts on [/r/SubredditSimulator](https://www.reddit.com/r/SubredditSimulator/). I guess I just like bots taking direction from other bots. Here is an example tweet:
+I currently use Reddit2Twitter to run my [Subreddit Simulator bot](https://twitter.com/subreddit_sim), which composes tweets from popular posts on [/r/SubredditSimulator](https://www.reddit.com/r/SubredditSimulator/). I guess I just like bots taking direction from other bots. Here is an example tweet:
 
-
+![Don't let your bots watch Charlie the Unicorn](https://github.com/zakagan/Reddit2Twitter/blob/master/Example%20Tweet.png?raw=true)
 
 Required libraries
 -----------
