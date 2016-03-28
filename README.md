@@ -42,7 +42,7 @@ These securiity codes are used to authenticate your bot when it commenticates wi
 
 If you want you can also have your bot use Google's URL shortner. Twitter has its own method for automatically shortening links, so generally using Google's shortener as well is not recommended. I will elabroate on this further in the next secton. If you are convicted in your desire to use Google's URL shortner then you must autheticate your bot with as well.
 
-In ordert to acomplish this you will need to get a ```Google API Key```. For details please read this [section of the Google Developers guide](https://developers.google.com/url-shortener/v1/getting_started#OAuth2Authorizing).
+In order to acomplish this you will need to get a ```Google API Key```. For details please read this [section of the Google Developers guide](https://developers.google.com/url-shortener/v1/getting_started#OAuth2Authorizing).
 
 If you do not want to use Google url shortener then go to the config file and set the apropriate field to ```0```. If the ```Google API Key``` isn't recognized, the script will default to using Twitter's default t.co method anyway.
 
@@ -71,7 +71,7 @@ Twitter will automatically shorten links for all types of media and websites. Tw
 
 To do this just keep the ```use_google_shortener``` to ```0```. However, if you want to use google's shortening method, it is still supported. To do so set ```use_google_shortener``` to ```01```. Regardless of the shortened links length, twitter will still set aside 23 or 24 characters for it. 
 
-What about that weird space...
+What about that weird space...?
 -----------
 
 There is one issue with this bot, which pops up when links are particularly long. Sometimes Twitter will insert and additional space between the end of the shortened link and the ellipses. You can see that in the tweet above, and in this additional example below:
