@@ -9,7 +9,7 @@ The goal of Reddit2Twitter is to automate the movement of content from a subredd
 
 I currently use Reddit2Twitter to run my [Subreddit Simulator bot](https://twitter.com/subreddit_sim), which composes tweets from popular posts on [/r/SubredditSimulator](https://www.reddit.com/r/SubredditSimulator/). I guess I just like bots taking direction from other bots. Here is an example tweet:
 
-![Don't let your bots watch Charlie the Unicorn](https://github.com/zakagan/Reddit2Twitter/blob/master/Example%20Tweet.png?raw=true)
+![Don't let your bots watch Charlie the Unicorn](https://github.com/zakagan/Reddit2Twitter/blob/master/Screenshots/Example_Tweet.png?raw=true)
 
 Required libraries
 -----------
@@ -71,4 +71,12 @@ Twitter will automatically shorten links for all types of media and websites. Tw
 
 To do this just keep the ```use_google_shortener``` to ```0```. However, if you want to use google's shortening method, it is still supported. To do so set ```use_google_shortener``` to ```01```. Regardless of the shortened links length, twitter will still set aside 23 or 24 characters for it. 
 
+What about that weird space...
+-----------
+
+There is one issue with this bot, which pops up when links are particularly long. Sometimes Twitter will insert and additional space between the end of the shortened link and the ellipses. You can see that in the tweet above, and in this additional example below:
+
+![Unintentional spaces make me almost as mad as poorly drawn red arrows](https://github.com/zakagan/Reddit2Twitter/blob/master/Screenshots/Phantom_Space.png?raw=true "The red arrow is there for additional clarification")
+
+As far as I know, this is an issue with Twitter's t.co shortener. If this truly bugs you, you can always use google's shortener instead (see, I knew I kept it around for a reason). If you would like more detail about this issue, please see [this reddit thread](https://www.reddit.com/r/learnpython/comments/4ardgy/a_phantom_char_haunts_my_reddittwitter_bot_can/).
 
