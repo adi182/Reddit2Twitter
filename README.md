@@ -9,7 +9,7 @@ The goal of Reddit2Twitter is to automate the movement of content from a subredd
 
 I currently use Reddit2Twitter to run my [Subreddit Simulator bot](https://twitter.com/subreddit_sim), which composes tweets from popular posts on [/r/SubredditSimulator](https://www.reddit.com/r/SubredditSimulator/). I guess I just like bots taking direction from other bots. Here is an example tweet:
 
-![Don't let your bots watch Charlie the Unicorn](https://github.com/zakagan/Reddit2Twitter/blob/master/Screenshots/Example_Tweet.png?raw=true)
+![Don't let your bots watch Charlie the Unicorn](https://github.com/zakagan/Reddit2Twitter/blob/master/Screenshots/Example_Tweet.png?raw=true "Not all features are present, check the config file!")
 
 Required libraries
 -----------
